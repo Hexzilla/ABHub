@@ -1,31 +1,71 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { PrismaClient, User } from "@prisma/client";
-import { validPassword } from "models/user";
+import { PrismaClient } from "@prisma/client";
+import { encryptPassword, verifyPassword } from "models/user";
+
+const prisma = new PrismaClient();
 
 passport.use(
-  "local-strategy",
+  "signup",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+      passReqToCallback: true,
+    },
+    async (req, email: string, password: string, done) => {
+      console.log("passport signup", email, password);
+      try {
+        let user = await prisma.user.findUnique({
+          where: {
+            email: email,
+          },
+        });
+        if (user) {
+          return done(null, null);
+        }
+
+        const encrypted = encryptPassword(password);
+        user = await prisma.user.create({
+          data: {
+            email: email,
+            name: req.body.name,
+            salt: encrypted.salt,
+            hash: encrypted.hash,
+          },
+        });
+
+        return done(null, user);
+      } catch (error) {
+        done(error);
+      }
+    }
+  )
+);
+
+passport.use(
+  "login",
   new LocalStrategy(
     {
       usernameField: "email",
       passwordField: "password",
     },
-    (email, password, done) => {
-      const prisma = new PrismaClient();
-      prisma.user.findUnique({
-        where: {
-          email: email,
-        },
-      })
-      .then((user: User | null) => {
-        if (!user || !validPassword(user, password)) {
-          return done(null, false, {
-            message: "email or password is invalid",
-          });
+    async (email: string, password: string, done) => {
+      console.log("passport login", email, password);
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: email,
+          },
+        });
+        if (!user || !verifyPassword(user, password)) {
+          return done("Email or password is invalid");
         }
+
         return done(null, user);
-      })
-      .catch(done);
+      } catch (error) {
+        done(error);
+      }
     }
   )
 );

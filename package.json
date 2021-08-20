@@ -7,6 +7,7 @@
     "serve": "nodemon ./src/app.ts",
     "build": "tsc --project ./",
     "tslint": "tslint --project tsconfig.json",
+    "prisma": "prisma generate",
     "prettier:base": "prettier --parser typescript --single-quote",
     "prettier:check": "npm run prettier:base -- --list-different \"src/**/*.{ts,tsx}\"",
     "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\""
@@ -16,6 +17,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-validator": "^6.12.1",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",

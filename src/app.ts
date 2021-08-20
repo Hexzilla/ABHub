@@ -19,6 +19,8 @@ app.use(methodOverride());
 app.use(express.static(__dirname + "../public"));
 app.use(favicon(path.join(__dirname, "../public", "favicon.png")));
 
+require("config/passport");
+
 // Routing
 app.use(routes);
 

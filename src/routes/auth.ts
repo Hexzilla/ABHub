@@ -1,5 +1,6 @@
 import { Request } from "express";
 import jwt from "express-jwt";
+import config from "config";
 
 function getTokenFromHeader(req: Request) {
   if (
@@ -12,18 +13,16 @@ function getTokenFromHeader(req: Request) {
   return null;
 }
 
-const secret = "ABHUB_SECRET_BEAUTIFUL_ADMIN_APP";
-
 export default {
   required: jwt({
     algorithms: ["HS256"],
-    secret: secret,
+    secret: config.secret,
     userProperty: "payload",
     getToken: getTokenFromHeader,
   }),
   optional: jwt({
     algorithms: ["HS256"],
-    secret: secret,
+    secret: config.secret,
     userProperty: "payload",
     credentialsRequired: false,
     getToken: getTokenFromHeader,

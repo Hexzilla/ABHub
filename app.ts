@@ -1,10 +1,10 @@
 import http from "http";
-import express from "express";
-import {Request, Response} from "express";
+import express, {Request, Response} from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import methodOverride from "method-override";
 import morgan from "morgan";
+import routes from "./routes";
 
 const isProduction = process.env.NODE_ENV === "production";
 const app = express();
@@ -16,9 +16,9 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(__dirname + "/public"));
 
-app.get("/", (req, res) => {
-  res.send("Well done!");
-});
+
+// Routing
+app.use(routes);
 
 
 /// catch 404 and forward to error handler

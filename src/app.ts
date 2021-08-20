@@ -25,7 +25,7 @@ app.use(routes);
 
 
 /// catch 404 and forward to error handler
-app.use((req: Request, res: Response, next: Function) => {
+app.use((req: Request, res: Response, next: (err: any) => void) => {
   const err = new Error("Not Found");
   next(err);
 });
@@ -34,8 +34,6 @@ app.use((req: Request, res: Response, next: Function) => {
 // will print stacktrace
 if (!isProduction) {
   app.use((err: any, req: Request, res: Response) => {
-    console.log(err.stack);
-
     res.status(err.status || 500);
 
     res.json({
@@ -60,6 +58,6 @@ app.use((err: any, req: Request, res: Response) => {
 });
 
 // finally, let's start our server...
-app.listen(process.env.PORT || 3000, function () {
+app.listen(process.env.PORT || 3000, () => {
   console.log("Listening on http://localhost:3000");
 });

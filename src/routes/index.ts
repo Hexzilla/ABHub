@@ -1,11 +1,25 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import users from "./users";
 
 const router = Router();
+
 router.get("/", (req, res) => {
   res.send("Welcome!");
 });
 router.use("/users", users);
+
+router.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  if (err.name === "ValidationError") {
+    return res.status(422).json({
+      errors: Object.keys(err.errors).reduce((errors: any, key: string) => {
+        errors[key] = err.errors[key].message;
+        return errors;
+      }, {}),
+    });
+  }
+
+  return next(err);
+});
 
 export default router;
 

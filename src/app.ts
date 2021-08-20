@@ -1,5 +1,5 @@
 import http from "http";
-import express, {Request, Response} from "express";
+import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import methodOverride from "method-override";
@@ -17,15 +17,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(__dirname + "../public"));
-app.use(favicon(path.join(__dirname, '../public', 'favicon.png')))
-
+app.use(favicon(path.join(__dirname, "../public", "favicon.png")));
 
 // Routing
 app.use(routes);
 
-
 /// catch 404 and forward to error handler
-app.use((req: Request, res: Response, next: (err: any) => void) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   const err = new Error("Not Found");
   next(err);
 });

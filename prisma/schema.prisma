@@ -3,16 +3,16 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mysql"
+  url      = "mysql://prisma:prisma@localhost/hubcore"
 }
 
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String
-  hash  String
-  salt  String
+  hash  String  @db.VarChar(256)
+  salt  String  @db.VarChar(256)
   posts Post[]
 }
 
@@ -26,4 +26,9 @@ model Post {
   viewCount Int      @default(0)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
+}
+
+model Product {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
 }

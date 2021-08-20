@@ -58,10 +58,12 @@ passport.use(
             email: email,
           },
         });
+        console.log("passport login-1");
         if (!user || !verifyPassword(user, password)) {
           return done("Email or password is invalid");
         }
 
+        console.log("passport login-2");
         return done(null, user);
       } catch (error) {
         done(error);

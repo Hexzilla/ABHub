@@ -1,12 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
-import users from "./users";
+import user from "./user";
 
 const router = Router();
-
-router.get("/", (req, res) => {
-  res.send("Welcome!");
-});
-router.use("/user", users);
 
 router.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (err.name === "ValidationError") {
@@ -20,6 +15,9 @@ router.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
   return next(err);
 });
+
+router.get("/", (req, res) => res.send("Welcome!"));
+router.use("/user", user);
 
 export default router;
 

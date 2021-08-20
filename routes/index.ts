@@ -6,7 +6,7 @@ const router = Router();
 const prisma = new PrismaClient();
 
 router.get("/", async (req: Request, res: Response) => {
-  let user: User = {
+  const user: User = {
     email: "bluebird2511@prisma.io",
     name: "Blue Bird",
   };

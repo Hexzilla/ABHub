@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import user from "./user";
+import products from "./products";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 router.get("/", (req, res) => res.send("Welcome!"));
 router.use("/user", user);
+router.use("/products", products);
 
 export default router;

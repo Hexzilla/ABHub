@@ -1,11 +1,13 @@
-import express from 'express';
+import http from "http";
+import express from "express";
 
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send('Well done!');
-})
+app.get("/", (req, res) => {
+  res.send("Well done!");
+});
 
-app.listen(3000, () => {
-    console.log('The application is listening on port 3000!');
-})
+// finally, let's start our server...
+app.listen(process.env.PORT || 3000, function () {
+  console.log("Listening on http://localhost:3000");
+});

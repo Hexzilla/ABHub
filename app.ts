@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import methodOverride from "method-override";
 import morgan from "morgan";
+import path from "path";
+import favicon from "serve-favicon";
 import routes from "./routes";
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -15,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(__dirname + "/public"));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
 
 
 // Routing

@@ -33,4 +33,25 @@ model Product {
   name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  servers   Server[]
+}
+
+model Server {
+  id          Int       @id @default(autoincrement())
+  address     String    @unique
+  name        String    @db.VarChar(256)
+  desc        String    @db.VarChar(256)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+}
+
+model Client {
+  id          Int       @id @default(autoincrement())
+  accounts    Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  server      Server    @relation(fields: [serverId], references: [id])
+  serverId    Int
 }

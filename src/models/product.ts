@@ -1,18 +1,7 @@
 import { PrismaClient, Prisma, Product } from '@prisma/client'
+import { errorHandler } from './errors'
 
 const prisma = new PrismaClient()
-
-const errorHandler = (e: any) => {
-  if (e instanceof Prisma.PrismaClientKnownRequestError) {
-    if (e.code == 'P2025') {
-      return new Error('record_not_found')
-    } else if (e.code == 'P2002') {
-      return new Error('unique_error')
-    }
-  }
-  console.error(e.meta)
-  return new Error('unknown')
-}
 
 export async function getAllProducts() {
   try {

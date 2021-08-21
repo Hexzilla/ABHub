@@ -1,9 +1,6 @@
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
-import { PrismaClient } from '@prisma/client'
 import { findUserByEmail, createUser, verifyPassword } from 'models/user'
-
-const prisma = new PrismaClient()
 
 passport.use(
   'signup',

@@ -50,7 +50,6 @@ model Server {
 
 model Client {
   id          Int       @id @default(autoincrement())
-  accounts    Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   server      Server    @relation(fields: [serverId], references: [id])

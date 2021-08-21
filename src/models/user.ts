@@ -1,7 +1,43 @@
-import { User } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import config from "config";
+
+const prisma = new PrismaClient();
+
+export async function findUserByEmail(email: string) {
+  try {
+    return await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function createUser(data: {
+  name: string;
+  email: string;
+  password: string;
+}) {
+  try {
+    const encrypted = encryptPassword(data.password);
+    return await prisma.user.create({
+      data: {
+        email: data.email,
+        name: data.name,
+        salt: encrypted.salt,
+        hash: encrypted.hash,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
 
 export function verifyPassword(user: User, password: string): boolean {
   const hash = crypto

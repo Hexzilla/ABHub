@@ -1,6 +1,18 @@
-import { PrismaClient, Product } from '@prisma/client'
+import { PrismaClient, Prisma, Product } from '@prisma/client'
 
 const prisma = new PrismaClient()
+
+const errorHandler = (e: any) => {
+  if (e instanceof Prisma.PrismaClientKnownRequestError) {
+    if (e.code == 'P2025') {
+      return new Error('record_not_found')
+    } else if (e.code == 'P2002') {
+      return new Error('unique_error')
+    }
+  }
+  console.error(e.meta)
+  return new Error('unknown')
+}
 
 export async function getAllProducts() {
   try {
@@ -16,9 +28,8 @@ export async function findProdct(where: object) {
     return await prisma.product.findUnique({
       where: where,
     })
-  } catch (err) {
-    console.log('Failed to find product:', where, err)
-    return null
+  } catch (e) {
+    return errorHandler(e)
   }
 }
 
@@ -33,9 +44,8 @@ export async function createProduct(name: string) {
         name: name,
       },
     })
-  } catch (err) {
-    console.log('Failed to create a product:', err)
-    return null
+  } catch (e) {
+    return errorHandler(e)
   }
 }
 
@@ -47,9 +57,8 @@ export async function updateProductById(id: number, data: object) {
       },
       data,
     })
-  } catch (err) {
-    console.log('Failed to update product:', id, name, err)
-    return null
+  } catch (e) {
+    return errorHandler(e)
   }
 }
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import {
+import Product, {
   getAllProducts,
   findProdct,
   findProdctByName,
@@ -15,18 +15,11 @@ export async function getProducts(req: Request, res: Response) {
 }
 
 export async function storeProduct(req: Request, res: Response) {
-  let product = await findProdctByName(req.body.name)
-  if (product) {
-    return res.status(422).json({
-      success: false,
-      message: 'The name is already exists',
-    })
-  }
-
-  product = await createProduct(req.body.name)
-  if (!product) {
+  const product = await createProduct(req.body.name)
+  if (!product || product instanceof Error) {
     return res.status(500).json({
       success: false,
+      message: product?.message,
     })
   }
 
@@ -37,12 +30,13 @@ export async function storeProduct(req: Request, res: Response) {
 }
 
 export async function updateProduct(req: Request, res: Response) {
-  const product = await updateProductById(req.body.id, {
+  const updated = await updateProductById(req.body.id, {
     name: req.body.name,
   })
-  if (!product) {
+  if (!updated || updated instanceof Error) {
     return res.status(500).json({
       success: false,
+      message: updated?.message,
     })
   }
 

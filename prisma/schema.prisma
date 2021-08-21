@@ -45,6 +45,7 @@ model Server {
   updatedAt   DateTime  @updatedAt
   product     Product   @relation(fields: [productId], references: [id])
   productId   Int
+  clients     Client[]
 }
 
 model Client {
@@ -54,4 +55,19 @@ model Client {
   updatedAt   DateTime  @updatedAt
   server      Server    @relation(fields: [serverId], references: [id])
   serverId    Int
+  accounts    Account[]
+}
+
+model Account {
+  id          Int       @id @default(autoincrement())
+  gameId      String    @db.VarChar(256)
+  password    String    @db.VarChar(256)
+  gameServer  String    @db.VarChar(32)
+  provider    String    @db.VarChar(32)
+  level       Int       @default(0)
+  state       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  client      Client    @relation(fields: [clientId], references: [id])
+  clientId    Int
 }

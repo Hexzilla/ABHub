@@ -58,4 +58,16 @@ export async function updateServerById(id: number, data: object) {
   }
 }
 
+export async function deleteServerById(id: number) {
+  try {
+    return await prisma.server.delete({
+      where: {
+        id: id,
+      },
+    })
+  } catch (e) {
+    return errorHandler(e)
+  }
+}
+
 export default Server

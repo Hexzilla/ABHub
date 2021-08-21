@@ -46,3 +46,5 @@ export function signup(req: Request, res: Response, next: NextFunction) {
     })
   })(req, res, next)
 }
+
+export function signout(req: Request, res: Response, next: NextFunction) {}

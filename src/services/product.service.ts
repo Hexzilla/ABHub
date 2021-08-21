@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import Product, {
   getAllProducts,
-  findProdct,
+  findUnique,
   findProdctByName,
   createProduct,
   updateProductById,

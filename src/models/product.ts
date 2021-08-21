@@ -12,7 +12,7 @@ export async function getAllProducts() {
   }
 }
 
-export async function findProdct(where: object) {
+export async function findUnique(where: object) {
   try {
     return await prisma.product.findUnique({
       where: where,
@@ -23,7 +23,7 @@ export async function findProdct(where: object) {
 }
 
 export async function findProdctByName(name: string) {
-  return findProdct({ name })
+  return findUnique({ name })
 }
 
 export async function createProduct(name: string) {
@@ -45,6 +45,21 @@ export async function updateProductById(id: number, data: object) {
         id: id,
       },
       data,
+    })
+  } catch (e) {
+    return errorHandler(e)
+  }
+}
+
+export async function getServers(product: Product) {
+  try {
+    return await prisma.product.findUnique({
+      where: {
+        id: product.id,
+      },
+      include: {
+        servers: true,
+      },
     })
   } catch (e) {
     return errorHandler(e)

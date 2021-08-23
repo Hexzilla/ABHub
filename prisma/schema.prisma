@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://prisma:prisma@localhost/hubcore"
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String
+  hash  String  @db.VarChar(256)
+  salt  String  @db.VarChar(256)
+  posts Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  viewCount Int      @default(0)
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  Int?
+}
+
+model Product {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  code      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  servers   Server[]
+}
+
+model Server {
+  id          Int       @id @default(autoincrement())
+  address     String    @unique
+  name        String    @db.VarChar(256)
+  desc        String    @db.VarChar(256)
+  state       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+  clients     Client[]
+}
+
+model Client {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  server      Server    @relation(fields: [serverId], references: [id])
+  serverId    Int
+  employees   Employee[]
+}
+
+model Employee {
+  id          Int       @id @default(autoincrement())
+  userId      String    @db.VarChar(256)
+  password    String    @db.VarChar(256)
+  location    String    @db.VarChar(32)
+  provider    String    @db.VarChar(32)
+  level       Int       @default(0)
+  state       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  client      Client    @relation(fields: [clientId], references: [id])
+  clientId    Int
+}

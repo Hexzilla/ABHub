@@ -14,6 +14,7 @@ router.post(
   body('address').isIP(4),
   body('name').notEmpty(),
   body('desc').notEmpty(),
+  body('productId').isNumeric(),
   validate,
   serverService.storeServer
 )

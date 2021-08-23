@@ -20,7 +20,7 @@ router.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 router.get('/', (req, res) => res.send('Welcome!'))
 router.use('/user', user)
-router.use('/products', products)
-router.use('/servers', servers)
+router.use('/product', products)
+router.use('/server', servers)
 
 export default router

@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express'
 import user from './user'
 import products from './product'
 import servers from './server'
+import clients from './client'
 
 const router = Router()
 
@@ -22,5 +23,6 @@ router.get('/', (req, res) => res.send('Welcome!'))
 router.use('/user', user)
 router.use('/product', products)
 router.use('/server', servers)
+router.use('/client', clients)
 
 export default router

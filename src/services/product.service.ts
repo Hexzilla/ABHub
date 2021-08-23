@@ -1,28 +1,21 @@
 import { Request, Response } from 'express'
-import Product, {
-  getAllProducts,
-  findProdctByName,
-  createProduct,
-  updateProductById,
-  deleteProductById,
-  getServerCounts,
-} from 'models/product'
+import * as _products from 'models/product'
 
-export async function getProducts(req: Request, res: Response) {
-  const items = await getAllProducts()
+export async function getProducts() {
+  const items = await _products.getAllProducts()
   if (!items || items instanceof Error) {
-    return res.status(500).json({
+    return {
       success: false,
       message: items?.message,
-    })
+    }
   }
 
-  const servers = await getServerCounts()
+  const servers = await _products.getServerCounts()
   if (!servers || servers instanceof Error) {
-    return res.status(500).json({
+    return {
       success: false,
       message: servers?.message,
-    })
+    }
   }
   console.log('servers', servers)
 
@@ -31,62 +24,78 @@ export async function getProducts(req: Request, res: Response) {
     servers: servers.find((s) => s.productId === it.id)?._count || 0,
   }))
 
-  return res.json({
-    products: products,
-  })
+  return {
+    success: true,
+    data: {
+      products,
+    },
+  }
 }
 
-export async function storeProduct(req: Request, res: Response) {
-  const product = await createProduct(req.body.name, req.body.code)
+export async function createProduct(name: string, code: string) {
+  console.log('createProduct', name, code)
+  const product = await _products.createProduct(name, code)
+  console.log('createProduct-2', product)
   if (!product || product instanceof Error) {
-    return res.status(500).json({
+    return {
       success: false,
       message: product?.message,
-    })
+    }
   }
 
-  return res.json({
+  console.log('createProduct-3', product)
+  return {
     success: true,
-    product: product,
-  })
+    data: {
+      product: product,
+    },
+  }
 }
 
-export async function updateProduct(req: Request, res: Response) {
-  const { id } = req.params
-  const updated = await updateProductById(Number(id), {
-    name: req.body.name,
-    code: req.body.code,
+export async function updateProduct(data: {
+  id: number
+  name: string
+  code: string
+}) {
+  const updated = await _products.updateProductById(data.id, {
+    name: data.name,
+    code: data.code,
   })
   if (!updated || updated instanceof Error) {
-    return res.status(500).json({
+    return {
       success: false,
       message: updated?.message,
-    })
+    }
   }
 
-  return res.json({
+  return {
     success: true,
-  })
+    data: {
+      updatedId: data.id,
+    },
+  }
 }
 
-export async function deleteProduct(req: Request, res: Response) {
-  const { id } = req.params
+export async function deleteProduct(id: number) {
   if (!id) {
-    return res.status(422).json({
+    return {
       success: false,
       message: 'invalid_record',
-    })
+    }
   }
 
-  const deleted = await deleteProductById(Number(id))
+  const deleted = await _products.deleteProductById(Number(id))
   if (!deleted || deleted instanceof Error) {
-    return res.status(500).json({
+    return {
       success: false,
       message: deleted?.message,
-    })
+    }
   }
 
-  return res.json({
+  return {
     success: true,
-  })
+    data: {
+      deletedId: id,
+    },
+  }
 }

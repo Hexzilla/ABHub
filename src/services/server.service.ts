@@ -7,12 +7,14 @@ import Server, {
   deleteServerById,
 } from 'models/servers'
 
-export async function getServers(req: Request, res: Response) {
-  const { id } = req.params
-  const servers = await getAllServers(Number(id))
-  return res.json({
-    servers,
-  })
+export async function getServers(productId: number) {
+  const servers = await getAllServers(productId)
+  return {
+    success: true,
+    data: {
+      servers,
+    },
+  }
 }
 
 export async function storeServer(req: Request, res: Response) {

@@ -17,10 +17,9 @@ router.post(
   serverService.storeServer
 )
 
-router.post(
-  '/update',
+router.put(
+  '/:id',
   auth.required,
-  body('id').isNumeric(),
   body('address').isIP(4),
   body('name').notEmpty(),
   body('desc').notEmpty(),

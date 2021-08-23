@@ -36,8 +36,8 @@ export async function storeServer(req: Request, res: Response) {
 }
 
 export async function updateServer(req: Request, res: Response) {
-  const serverId = Number(req.body.id)
-  const updated = await updateServerById(serverId, {
+  const { id } = req.params
+  const updated = await updateServerById(Number(id), {
     address: String(req.body.address),
     name: String(req.body.name),
     desc: String(req.body.desc),

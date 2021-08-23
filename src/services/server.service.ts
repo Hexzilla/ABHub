@@ -37,7 +37,9 @@ export async function storeServer(req: Request, res: Response) {
 export async function updateServer(req: Request, res: Response) {
   const serverId = Number(req.body.id)
   const updated = await updateServerById(serverId, {
-    name: req.body.name,
+    address: String(req.body.address),
+    name: String(req.body.name),
+    desc: String(req.body.desc),
   })
   if (!updated || updated instanceof Error) {
     return res.status(500).json({
@@ -53,6 +55,12 @@ export async function updateServer(req: Request, res: Response) {
 
 export async function deleteServer(req: Request, res: Response) {
   const { id } = req.params
+  if (!id) {
+    return res.status(422).json({
+      success: false,
+      message: 'invalid_record',
+    })
+  }
 
   const deleted = await deleteServerById(Number(id))
   if (!deleted || deleted instanceof Error) {

@@ -19,6 +19,17 @@ router.post(
   serverService.storeServer
 )
 
-router.post('/update', auth.required, serverService.updateServer)
+router.post(
+  '/update',
+  auth.required,
+  body('id').isNumeric(),
+  body('address').isIP(4),
+  body('name').notEmpty(),
+  body('desc').notEmpty(),
+  validate,
+  serverService.updateServer
+)
+
+router.delete('/:id', auth.required, serverService.deleteServer)
 
 export default router

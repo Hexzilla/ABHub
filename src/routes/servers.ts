@@ -6,8 +6,6 @@ import * as serverService from 'services/server.service'
 
 const router = Router()
 
-router.get('/', auth.required, serverService.getServers)
-
 router.post(
   '/store',
   auth.required,

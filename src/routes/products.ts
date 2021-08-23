@@ -3,6 +3,7 @@ import { body } from 'express-validator'
 import { validate } from 'routes/validate'
 import auth from 'routes/auth'
 import * as productService from 'services/product.service'
+import * as serverService from 'services/server.service'
 
 const router = Router()
 
@@ -28,5 +29,7 @@ router.post(
 )
 
 router.delete('/:id', auth.required, productService.deleteProduct)
+
+router.get('/:id/servers', auth.required, serverService.getServers)
 
 export default router

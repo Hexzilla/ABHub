@@ -3,9 +3,13 @@ import { errorHandler } from './errors'
 
 const prisma = new PrismaClient()
 
-export async function getAllServers() {
+export async function getAllServers(productId: number) {
   try {
-    return await prisma.server.findMany()
+    return await prisma.server.findMany({
+      where: {
+        productId: productId,
+      },
+    })
   } catch (err) {
     console.log('Failed to get all products:', err)
     return null
@@ -64,6 +68,17 @@ export async function deleteServerById(id: number) {
       where: {
         id: id,
       },
+    })
+  } catch (e) {
+    return errorHandler(e)
+  }
+}
+
+export async function getClientCounts() {
+  try {
+    return await prisma.client.groupBy({
+      by: ['serverId'],
+      _count: true,
     })
   } catch (e) {
     return errorHandler(e)

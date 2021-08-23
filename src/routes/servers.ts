@@ -26,6 +26,7 @@ router.post(
   body('address').isIP(4),
   body('name').notEmpty(),
   body('desc').notEmpty(),
+  body('state').isNumeric(),
   validate,
   serverService.updateServer
 )

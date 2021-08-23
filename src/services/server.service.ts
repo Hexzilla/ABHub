@@ -40,6 +40,7 @@ export async function updateServer(req: Request, res: Response) {
     address: String(req.body.address),
     name: String(req.body.name),
     desc: String(req.body.desc),
+    state: Number(req.body.state),
   })
   if (!updated || updated instanceof Error) {
     return res.status(500).json({

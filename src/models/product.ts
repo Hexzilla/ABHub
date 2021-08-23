@@ -88,4 +88,15 @@ export async function getServers(product: Product) {
   }
 }
 
+export async function getServerCounts() {
+  try {
+    return await prisma.server.groupBy({
+      by: ['productId'],
+      _count: true,
+    })
+  } catch (e) {
+    return errorHandler(e)
+  }
+}
+
 export default Product

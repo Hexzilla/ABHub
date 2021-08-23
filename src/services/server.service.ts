@@ -8,9 +8,9 @@ import Server, {
 } from 'models/servers'
 
 export async function getServers(req: Request, res: Response) {
-  const products = await getAllServers()
+  const servers = await getAllServers()
   return res.json({
-    products: products,
+    servers,
   })
 }
 

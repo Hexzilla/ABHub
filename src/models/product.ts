@@ -12,6 +12,15 @@ export async function getAllProducts() {
   }
 }
 
+export async function getServerCount(product: Product) {
+  try {
+    return await prisma.product.findMany()
+  } catch (err) {
+    console.log('Failed to get server count:', err)
+    return null
+  }
+}
+
 export async function findUnique(where: object) {
   try {
     return await prisma.product.findUnique({

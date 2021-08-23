@@ -2,21 +2,15 @@ import { Router, Request, Response } from 'express'
 import { body } from 'express-validator'
 import { validate } from 'routes/validate'
 import auth from 'routes/auth'
+import { sendJsonResponse } from 'helpers'
 import * as productService from 'services/product.service'
 import * as serverService from 'services/server.service'
 
 const router = Router()
 
-const sendResponse = function (res: Response, paylod: any) {
-  if (!paylod.success) {
-    return res.status(500).json(paylod)
-  }
-  return res.json(paylod)
-}
-
 router.get('/', auth.required, async (req: Request, res: Response) => {
   const result = await productService.getProducts()
-  return sendResponse(res, result)
+  return sendJsonResponse(res, result)
 })
 
 router.post(
@@ -31,7 +25,7 @@ router.post(
       String(name),
       String(code)
     )
-    return sendResponse(res, result)
+    return sendJsonResponse(res, result)
   }
 )
 
@@ -47,14 +41,14 @@ router.put(
       name: String(req.body.name),
       code: String(req.body.code),
     })
-    return sendResponse(res, result)
+    return sendJsonResponse(res, result)
   }
 )
 
 router.delete('/:id', auth.required, async (req: Request, res: Response) => {
   const { id } = req.params
   const result = await productService.deleteProduct(Number(id))
-  return sendResponse(res, result)
+  return sendJsonResponse(res, result)
 })
 
 router.get(
@@ -63,7 +57,7 @@ router.get(
   async (req: Request, res: Response) => {
     const { id } = req.params
     const result = await serverService.getServers(Number(id))
-    return sendResponse(res, result)
+    return sendJsonResponse(res, result)
   }
 )
 

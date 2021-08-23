@@ -52,8 +52,8 @@ export async function storeProduct(req: Request, res: Response) {
 }
 
 export async function updateProduct(req: Request, res: Response) {
-  const productId = Number(req.body.id)
-  const updated = await updateProductById(productId, {
+  const { id } = req.params
+  const updated = await updateProductById(Number(id), {
     name: req.body.name,
     code: req.body.code,
   })

@@ -18,10 +18,9 @@ router.post(
   productService.storeProduct
 )
 
-router.post(
-  '/update',
+router.put(
+  '/:id',
   auth.required,
-  body('id').isNumeric(),
   body('name').notEmpty(),
   body('code').notEmpty(),
   validate,

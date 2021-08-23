@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import user from './user'
-import products from './products'
-import servers from './servers'
+import products from './product'
+import servers from './server'
 
 const router = Router()
 

@@ -1,14 +1,9 @@
 import { Request, Response } from 'express'
-import Server, {
-  getAllServers,
-  findUnique,
-  createServer,
-  updateServerById,
-  deleteServerById,
-} from 'models/servers'
+import { errorMessage, resultData } from 'helpers'
+import * as _servers from 'models/servers'
 
 export async function getServers(productId: number) {
-  const servers = await getAllServers(productId)
+  const servers = await _servers.getAllServers(productId)
   return {
     success: true,
     data: {
@@ -17,64 +12,60 @@ export async function getServers(productId: number) {
   }
 }
 
-export async function storeServer(req: Request, res: Response) {
-  const server = await createServer({
-    address: String(req.body.address),
-    name: String(req.body.name),
-    desc: String(req.body.desc),
-    productId: Number(req.body.productId),
+export async function createServer(
+  productId: number,
+  address: string,
+  name: string,
+  desc: string
+) {
+  const server = await _servers.createServer({
+    address,
+    name,
+    desc,
+    productId,
   })
   if (!server || server instanceof Error) {
-    return res.status(500).json({
-      success: false,
-      message: server?.message,
-    })
+    return errorMessage(server?.message)
   }
 
-  return res.json({
-    success: true,
-    server: server,
+  return resultData({
+    server,
   })
 }
 
-export async function updateServer(req: Request, res: Response) {
-  const { id } = req.params
-  const updated = await updateServerById(Number(id), {
-    address: String(req.body.address),
-    name: String(req.body.name),
-    desc: String(req.body.desc),
-    state: Number(req.body.state),
+export async function updateServer(
+  serverId: number,
+  address: string,
+  name: string,
+  desc: string,
+  state: number
+) {
+  const updated = await _servers.updateServerById(serverId, {
+    address,
+    name,
+    desc,
+    state,
   })
   if (!updated || updated instanceof Error) {
-    return res.status(500).json({
-      success: false,
-      message: updated?.message,
-    })
+    return errorMessage(updated?.message)
   }
 
-  return res.json({
-    success: true,
+  return resultData({
+    updatedId: serverId,
   })
 }
 
-export async function deleteServer(req: Request, res: Response) {
-  const { id } = req.params
-  if (!id) {
-    return res.status(422).json({
-      success: false,
-      message: 'invalid_record',
-    })
+export async function deleteServer(serverId: number) {
+  if (!serverId) {
+    return errorMessage('invalid_record')
   }
 
-  const deleted = await deleteServerById(Number(id))
+  const deleted = await _servers.deleteServerById(serverId)
   if (!deleted || deleted instanceof Error) {
-    return res.status(500).json({
-      success: false,
-      message: deleted?.message,
-    })
+    return errorMessage(deleted?.message)
   }
 
-  return res.json({
-    success: true,
+  return resultData({
+    deletedId: serverId,
   })
 }
